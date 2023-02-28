@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web View HTML Page</title>
+</head>
+<body>
+    <h1>Android CleverTap Web View</h1>
+    <button onclick="pushEvent()">Push Event</button>
+    <br/> <br/>
+    <button onclick="invokeChargedEvent()">Invoke Charged Event</button>
+    <br/> <br/>
+    <button onclick="onUserLogin()">Invoke Login Event</button>
+    <script>
+        function pushEvent() {
+            CleverTap.pushEvent("WebView Event")
+        }
+        function invokeChargedEvent(){
+            var chargeDetails = {Amount: 300, Payment: 'Card'};
+            var items = [{Category: 'Books', Name: 'Book name', Quantity: 1},{Category: 'Clothes', Name: 'Cloth name', Quantity: 1},{Category: 'Food', Name: 'Food name', Quantity: 1}]
+            CleverTap.pushChargedEvent(JSON.stringify(chargeDetails),JSON.stringify(items))
+        }
+        function onUserLogin(){
+          var userDetails = {Name: "Ashu",
+            Email:"AsHU@gmail.com",
+            Phone:  "+919980742250",
+            Gender : "F",
+            Identity: 9980742250,
+          }
+          CleverTap.pushProfile(JSON.stringify(userDetails))
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    tools:context=".UserLoginActivity">
+
+    <EditText
+        android:id="@+id/profileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:layout_margin="30dp"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/profileEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:layout_margin="30dp"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/profilePhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone"
+        android:layout_margin="30dp"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/profileIdentity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Identity"
+        android:layout_margin="30dp"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/profileLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_margin="30dp"
+        tools:ignore="HardcodedText" />
+    <Button
+        android:id="@+id/profilePush"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Push Profile"
+        android:layout_margin="30dp"
+        tools:ignore="HardcodedText" />
+
+</LinearLayout>

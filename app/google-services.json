@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "972815565921",
+    "project_id": "tejas-demoapp",
+    "storage_bucket": "tejas-demoapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972815565921:android:7c389a9a8f5a6732a99620",
+        "android_client_info": {
+          "package_name": "com.example.tejas_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972815565921-c2jvnch182otp14hpn3k9vh0s4v9rn0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0rnDPzVOdADRFp1AnzkndSGvIY6VOrFQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972815565921-c2jvnch182otp14hpn3k9vh0s4v9rn0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
