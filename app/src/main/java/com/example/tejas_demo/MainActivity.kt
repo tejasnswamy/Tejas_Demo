@@ -1,6 +1,7 @@
 package com.example.tejas_demo
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -26,13 +27,15 @@ import com.clevertap.android.geofence.interfaces.CTGeofenceEventsListener
 import com.clevertap.android.sdk.CTInboxListener
 import com.clevertap.android.sdk.CleverTapAPI
 import com.clevertap.android.sdk.PushPermissionResponseListener
+import com.clevertap.android.sdk.pushnotification.CTPushNotificationListener
 import com.clevertap.android.sdk.pushnotification.amp.CTPushAmpListener
 import com.example.tejas_demo.databinding.ActivityMainBinding
 import org.json.JSONObject
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListener,CTInboxListener,CTPushAmpListener{
+class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListener,CTInboxListener,CTPushAmpListener,
+    CTPushNotificationListener {
     private var cleverTapInstance:CleverTapAPI? = null
     var ctGeofenceAPI : CTGeofenceAPI? = null
     lateinit var binding: ActivityMainBinding
@@ -47,16 +50,14 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
 
         requestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val channel = NotificationChannel(
-                        "got",
-                        "Game of Thrones",
-                        NotificationManager.IMPORTANCE_HIGH,
+                val channel = NotificationChannel(
+                    "got",
+                    "Game of Thrones",
+                    NotificationManager.IMPORTANCE_HIGH,
 
-                        )
-                    val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    manager.createNotificationChannel(channel)
-                }
+                    )
+                val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                manager.createNotificationChannel(channel)
             }
             else {
                 //show error message
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
         cleverTapInstance?.apply {
 
             ctNotificationInboxListener = this@MainActivity
+            ctPushNotificationListener = this@MainActivity
 
             //Initialize the inbox and wait for callbacks on overridden methods
             initializeInbox()
@@ -91,6 +93,7 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
             askForNotificationPermission()
             Toast.makeText(applicationContext, "Enable Notification", Toast.LENGTH_SHORT).show()
         }
+
 
 
 
@@ -204,6 +207,7 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
 
 
 
+    @SuppressLint("SuspiciousIndentation")
     private fun callEvent(){
         val arrayList = ArrayList<String>()//Creating an empty arraylist
             arrayList.add("Men")//Adding object in arraylist
@@ -236,6 +240,10 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
 
     override fun onDestroy() {
         super.onDestroy()
+
+    }
+
+    override fun onNotificationClickedPayloadReceived(p0: HashMap<String, Any>?) {
 
     }
 

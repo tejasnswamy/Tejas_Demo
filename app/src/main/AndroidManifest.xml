@@ -79,6 +79,8 @@
             android:name="com.clevertap.android.sdk.Utils.getAppIcon"
             android:resource="@drawable/ct_icon" />
 
+
+
         <service
             android:name="com.clevertap.android.sdk.pushnotification.fcm.FcmMessageListenerService"
             android:exported="true">
@@ -87,7 +89,13 @@
             </intent-filter>
         </service>
 
-
+        <service
+            android:name=".fcm.MyFCMService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
 
     </application>
 
