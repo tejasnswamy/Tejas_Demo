@@ -10,6 +10,6 @@ class MyApp : android.app.Application() {
     override fun onCreate() {
         ActivityLifecycleCallback.register(this)
         super.onCreate()
-        //CleverTapAPI.setNotificationHandler(PushTemplateNotificationHandler() as NotificationHandler)
+        CleverTapAPI.setNotificationHandler(PushTemplateNotificationHandler() as NotificationHandler)
     }
 }
