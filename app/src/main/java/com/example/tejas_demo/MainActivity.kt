@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
         ctGeofenceAPI = CTGeofenceAPI.getInstance(applicationContext)
         cleverTapInstance?.ctPushAmpListener = this
         cleverTapInstance?.enableDeviceNetworkInfoReporting(true)
+        cleverTapInstance?.pushNotificationViewedEvent(null)
         binding.updateProfile.setOnClickListener(this)
         binding.addEvents.setOnClickListener(this)
         binding.webView.setOnClickListener(this)
