@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -24,9 +25,11 @@ import com.clevertap.android.geofence.CTGeofenceAPI
 import com.clevertap.android.geofence.CTGeofenceSettings
 import com.clevertap.android.geofence.Logger
 import com.clevertap.android.geofence.interfaces.CTGeofenceEventsListener
-import com.clevertap.android.sdk.CTInboxListener
-import com.clevertap.android.sdk.CleverTapAPI
-import com.clevertap.android.sdk.PushPermissionResponseListener
+import com.clevertap.android.sdk.*
+import com.clevertap.android.sdk.inapp.CTInAppNotification
+import com.clevertap.android.sdk.inapp.CTLocalInApp
+
+import com.clevertap.android.sdk.product_config.CTProductConfigListener
 import com.clevertap.android.sdk.pushnotification.CTPushNotificationListener
 import com.clevertap.android.sdk.pushnotification.amp.CTPushAmpListener
 import com.example.tejas_demo.databinding.ActivityMainBinding
@@ -34,8 +37,8 @@ import org.json.JSONObject
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListener,CTInboxListener,CTPushAmpListener,
-    CTPushNotificationListener {
+class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListener,CTInboxListener,CTPushAmpListener,InAppNotificationButtonListener,
+    CTPushNotificationListener, PushPermissionResponseListener {
     private var cleverTapInstance:CleverTapAPI? = null
     var ctGeofenceAPI : CTGeofenceAPI? = null
     lateinit var binding: ActivityMainBinding
@@ -48,7 +51,7 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        requestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+      /*  requestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
                 val channel = NotificationChannel(
                     "got",
@@ -63,13 +66,12 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
                 //show error message
                 Toast.makeText(applicationContext, "Enable Notification To Receive Notifications", Toast.LENGTH_SHORT).show()
             }
-        }
+        }*/
 
         cleverTapInstance = CleverTapAPI.getDefaultInstance(applicationContext)
         ctGeofenceAPI = CTGeofenceAPI.getInstance(applicationContext)
         cleverTapInstance?.ctPushAmpListener = this
         cleverTapInstance?.enableDeviceNetworkInfoReporting(true)
-        cleverTapInstance?.pushNotificationViewedEvent(null)
         binding.updateProfile.setOnClickListener(this)
         binding.addEvents.setOnClickListener(this)
         binding.webView.setOnClickListener(this)
@@ -78,24 +80,23 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
         binding.customInbox.setOnClickListener(this)
         binding.geofence.setOnClickListener(this)
         binding.inapp.setOnClickListener(this)
+        binding.productViewed.setOnClickListener(this)
         binding.pushTemplate.setOnClickListener(this)
+        binding.fab.setOnClickListener(this)
+        cleverTapInstance?.registerPushPermissionNotificationResponseListener(this)
 
-        CleverTapAPI.setDebugLevel(CleverTapAPI.LogLevel.DEBUG)
+      /*  if (!cleverTapInstance?.isPushPermissionGranted!!) {
+            requestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }*/
+        CleverTapAPI.setDebugLevel(2)
         cleverTapInstance?.apply {
 
             ctNotificationInboxListener = this@MainActivity
             ctPushNotificationListener = this@MainActivity
-
+            setInAppNotificationButtonListener(this@MainActivity)
             //Initialize the inbox and wait for callbacks on overridden methods
             initializeInbox()
         }
-        if (!cleverTapInstance?.isPushPermissionGranted!!){
-
-            askForNotificationPermission()
-            Toast.makeText(applicationContext, "Enable Notification", Toast.LENGTH_SHORT).show()
-        }
-
-
 
 
         //GeoFence
@@ -109,10 +110,25 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
         }
 
     }
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun askForNotificationPermission() {
-        requestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        //requestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+
+        if (!cleverTapInstance?.isPushPermissionGranted!!) {
+            Toast.makeText(applicationContext, "Enable Notification", Toast.LENGTH_SHORT).show()
+
+            val builder = CTLocalInApp.builder()
+                .setInAppType(CTLocalInApp.InAppType.ALERT)
+                .setTitleText("Get Notified")
+                .setMessageText("Enable Notification permission")
+                .followDeviceOrientation(true)
+                .setPositiveBtnText("Allow")
+                .setNegativeBtnText("Cancel")
+                .build()
+            cleverTapInstance?.promptPushPrimer(builder)
+        } else{
+            Toast.makeText(applicationContext, "Push Notification Already Enabled", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     fun recordPurchase(cleverTapAPI: CleverTapAPI){
@@ -180,9 +196,11 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
     }
 
     override fun onLocationChanged(location: Location) {
-
+        Toast.makeText(applicationContext,location.toString(),Toast.LENGTH_SHORT).show()
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onClick(v: View?) {
         when (v?.id){
             R.id.update_profile -> startActivity(Intent(this, UserLoginActivity::class.java))
@@ -199,8 +217,13 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
                 startActivity(Intent(this, NativeDisplayActivity::class.java))
             }
             R.id.push_template -> cleverTapInstance?.pushEvent("Template Event")
+            R.id.product_viewed -> pushProductEvent()
 
-            R.id.web_view -> startActivity(Intent(this,WebViewActivity::class.java))
+            R.id.web_view -> {
+                startActivity(Intent(this,WebViewActivity::class.java))
+            }
+
+            R.id.fab -> askForNotificationPermission()
 
 
         }
@@ -223,7 +246,10 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
                 "Data" to arrayList)
 
             cleverTapInstance?.pushEvent("Product Clicked", prodViewedAction)
-           // cleverTapInstance?.let { it1 -> recordPurchase(it1) }
+    }
+
+    private fun pushProductEvent(){
+        cleverTapInstance?.pushEvent("Product viewed")
     }
 
     override fun inboxDidInitialize() {
@@ -241,12 +267,31 @@ class MainActivity : AppCompatActivity() , LocationListener , View.OnClickListen
 
     override fun onDestroy() {
         super.onDestroy()
+        cleverTapInstance?.unregisterPushPermissionNotificationResponseListener(this)
 
     }
-
     override fun onNotificationClickedPayloadReceived(p0: HashMap<String, Any>?) {
 
     }
 
+    override fun onInAppButtonClick(payload: HashMap<String, String>?) {
+        val str = payload?.entries.toString()
+        Log.d("Tejas", "Tejas$str")
+        Toast.makeText(applicationContext,"Tejas$str",Toast.LENGTH_SHORT).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onPushPermissionResponse(accepted: Boolean) {
+        Log.d("Clevertap", "onPushPermissionResponse :  InApp---> response() called accepted=$accepted")
+        if (accepted) {
+            val channel = NotificationChannel(
+                "got",
+                "Game of Thrones",
+                NotificationManager.IMPORTANCE_HIGH,
+                )
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+    }
 
 }

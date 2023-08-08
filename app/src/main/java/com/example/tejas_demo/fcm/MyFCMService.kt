@@ -1,6 +1,7 @@
 package com.example.tejas_demo.fcm
 
 
+import android.os.Bundle
 import android.util.Log
 import com.clevertap.android.sdk.CleverTapAPI
 import com.clevertap.android.sdk.pushnotification.fcm.CTFcmMessageHandler
@@ -25,6 +26,4 @@ class MyFCMService : FirebaseMessagingService() {
             Log.d("Clevertap", e.message + "");
         }
     }
-
-
 }

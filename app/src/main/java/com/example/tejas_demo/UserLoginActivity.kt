@@ -16,14 +16,16 @@ class UserLoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         cleverTapInstance = CleverTapAPI.getDefaultInstance(applicationContext)
         binding.profileName.setText("Tejas")
-        binding.profileIdentity.setText("9980742251")
+        binding.profileIdentity.setText("9986350886")
         binding.profileEmail.setText("tejas@outlook.com")
-        binding.profilePhone.setText("+919980742251")
+        binding.profilePhone.setText("+919986350886")
         binding.profileLogin.setOnClickListener() {
             callOnUserLogin()
+            finish()
         }
         binding.profilePush.setOnClickListener(){
             callProfilePush()
+            finish()
         }
 
     }

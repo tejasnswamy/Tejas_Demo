@@ -27,7 +27,7 @@ class WebViewActivity : AppCompatActivity() {
             }
             addJavascriptInterface(
                 CTWebInterface(CleverTapAPI.getDefaultInstance(this@WebViewActivity)),
-                "CleverTap"
+                "Tejas"
             )
         }
     }

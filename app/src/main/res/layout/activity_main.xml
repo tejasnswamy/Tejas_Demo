@@ -89,12 +89,12 @@
         android:textSize="17sp" />
 
     <Button
-        android:id="@+id/inapp_callback"
+        android:id="@+id/product_viewed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/product_exp"
         android:layout_centerHorizontal="true"
-        android:text="In App Callback Event"
+        android:text="Product viewed"
         android:textAllCaps="false"
         android:textSize="17sp" />
 
@@ -102,7 +102,7 @@
         android:id="@+id/web_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/inapp_callback"
+        android:layout_below="@id/product_viewed"
         android:layout_centerHorizontal="true"
         android:text="Web View"
         android:textAllCaps="false"
@@ -117,5 +117,15 @@
         android:text="Push Template"
         android:textAllCaps="false"
         android:textSize="17sp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:src="@android:drawable/stat_notify_call_mute" />
 
 </RelativeLayout>
