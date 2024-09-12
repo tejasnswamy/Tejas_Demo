@@ -13,8 +13,8 @@ import java.util.ArrayList
 
 class NativeDisplayActivity : AppCompatActivity(), DisplayUnitListener {
 
-    lateinit var binding: ActivityNativeDisplayBinding
-    var cleverTapDefaultInstance: CleverTapAPI? = null
+    private lateinit var binding: ActivityNativeDisplayBinding
+    private var cleverTapDefaultInstance: CleverTapAPI? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +36,10 @@ class NativeDisplayActivity : AppCompatActivity(), DisplayUnitListener {
     private fun prepareDisplayView(unit: CleverTapDisplayUnit) {
         println("prepareDisplayView: $unit")
         println("title: ${unit.contents[0].title} and Message: ${unit.contents[0].message}")
+        Toast.makeText(applicationContext,unit.customExtras.get("Food"),Toast.LENGTH_SHORT).show()
         unit.contents.forEach {
             binding.nativeDisplayTitle.text = it.title.toString()
-            binding.nativeDisplayMessage.text = it.message.toString()
+            binding.nativeDisplayMessage.text = it.message.toString() +" Custom Value Food"+ unit.customExtras.get("Food")
             binding.nativeDisplayTitle.setTextColor(Color.parseColor(it.titleColor))
             binding.nativeDisplayMessage.setTextColor(Color.parseColor(it.messageColor))
             Glide.with(this).load(it.media).into(binding.nativeDisplayImage)
@@ -51,6 +52,7 @@ class NativeDisplayActivity : AppCompatActivity(), DisplayUnitListener {
         binding.nativeDisplayCardView.setOnClickListener {
             CleverTapAPI.getDefaultInstance(this)?.pushDisplayUnitClickedEventForID(unit.unitID).apply {
                 Toast.makeText(applicationContext, "Event Card Clicked!", Toast.LENGTH_SHORT).show()
+
             }
         }
     }

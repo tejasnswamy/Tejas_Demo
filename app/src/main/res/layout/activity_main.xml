@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/update_profile"
         android:layout_centerHorizontal="true"
-        android:text="Events"
+        android:text="Product Clicked"
         android:textAllCaps="false"
         android:textSize="17sp" />
 

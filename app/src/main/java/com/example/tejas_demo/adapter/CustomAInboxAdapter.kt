@@ -2,6 +2,7 @@ package com.example.tejas_demo.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -18,10 +19,13 @@ class CustomAInboxAdapter(var caiList: ArrayList<CTInboxMessage>, var context: C
     }
 
 
+    @SuppressLint("RestrictedApi")
     override fun onBindViewHolder(holder: CustomAIHolder, position: Int) {
         val list = arrList[position]
         holder.binding.customAiMessage.text = list.inboxMessageContents[0].message
         holder.binding.customAiTitle.text = list.inboxMessageContents[0].title
+
+
     }
 
     override fun getItemCount() = arrList.size

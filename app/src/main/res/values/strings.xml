@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Tejas_Demo</string>
+    <string name="ct_profile_key_is_browsing">isBrowsing</string>
 </resources>

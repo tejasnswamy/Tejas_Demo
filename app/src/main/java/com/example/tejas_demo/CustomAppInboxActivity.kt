@@ -2,6 +2,7 @@ package com.example.tejas_demo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.clevertap.android.sdk.CTInboxListener
@@ -26,6 +27,7 @@ class CustomAppInboxActivity : AppCompatActivity(), CTInboxListener {
 
 
         val allMessage = cleverTapDefaultInstance!!.allInboxMessages
+
 
         binding.customAppInboxRv.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(applicationContext)

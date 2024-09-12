@@ -20,10 +20,12 @@ class UserLoginActivity : AppCompatActivity() {
         binding.profileEmail.setText("tejas@outlook.com")
         binding.profilePhone.setText("+919986350886")
         binding.profileLogin.setOnClickListener() {
+            //cleverTapInstance?.setOptOut(true);
             callOnUserLogin()
             finish()
         }
         binding.profilePush.setOnClickListener(){
+            cleverTapInstance?.setOptOut(true);
             callProfilePush()
             finish()
         }
