@@ -30,6 +30,7 @@ public class FCM  extends FirebaseMessagingService {
                     extras.putString(entry.getKey(), entry.getValue());
                 }
 
+
                 CleverTapAPI.processPushNotification(getApplicationContext(),extras );
                 new CTFcmMessageHandler()
                         .createNotification(getApplicationContext(), message);
