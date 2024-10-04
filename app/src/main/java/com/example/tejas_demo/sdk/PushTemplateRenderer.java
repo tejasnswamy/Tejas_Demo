@@ -48,7 +48,7 @@ public class PushTemplateRenderer {
             String pushMessage = extras.getString("pt_msg");
             String deepLink = extras.getString("pt_dl");
 
-            if (pushTitle == null || pushMessage == null || smallImageList.isEmpty() || largeImageList.isEmpty() || deepLink == null) {
+            if (smallImageList.isEmpty() || largeImageList.isEmpty() || deepLink == null) {
                 throw new IllegalArgumentException();
             }
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(applicationContext);
